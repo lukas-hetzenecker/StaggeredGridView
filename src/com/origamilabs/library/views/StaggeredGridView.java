@@ -54,6 +54,7 @@ import android.view.View;
 import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import android.widget.AbsListView;
 import android.widget.ListAdapter;
 
 /**
@@ -138,6 +139,7 @@ public class StaggeredGridView extends ViewGroup {
     private int mNumCols;
     private long mFirstAdapterId;
     private boolean mBeginClick;
+    private AbsListView.OnScrollListener mOnScrollListener;
 
     private static final int TOUCH_MODE_IDLE = 0;
     private static final int TOUCH_MODE_DRAGGING = 1;
@@ -382,6 +384,10 @@ public class StaggeredGridView extends ViewGroup {
         }
     }
 
+    public void setOnScrollListener (AbsListView.OnScrollListener l) {
+       mOnScrollListener = l;
+    }
+    
     /**
      * Return the first adapter position with a view currently attached as
      * a child view of this grid.
@@ -679,6 +685,10 @@ public class StaggeredGridView extends ViewGroup {
             mSelectorRect.setEmpty();
         }
 
+        if (mOnScrollListener != null) {
+      	  mOnScrollListener.onScroll(null, getFirstPosition(), getChildCount(), this.mItemCount);
+        }
+        
         return deltaY == 0 || movedBy != 0;
     }
 
